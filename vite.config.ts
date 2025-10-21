@@ -37,6 +37,7 @@ export default defineConfig({
         portal: path.resolve(import.meta.dirname, "client", "pages", "portal", "index.html"),
         404: path.resolve(import.meta.dirname, "client", "pages", "404.html"),
         authcallback: path.resolve(import.meta.dirname, "client", "pages", "oauth2", "callback", "index.html"),
+        auth_err: path.resolve(import.meta.dirname, "client", "pages", "oauth2", "error", "index.html"),
       },
       output: {
         manualChunks: (id) => {
