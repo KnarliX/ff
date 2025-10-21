@@ -45,56 +45,16 @@
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <g stroke="#1cdfff" stroke-width="2" fill="none">
 
-      <circle cx="50" cy="50" r="40" stroke="#00e5ff" opacity="0.2" />
-      <circle cx="50" cy="50" r="30" stroke="#66f0ff" opacity="0.35" />
-
-      <path d="M10 50 A40 40 0 0 1 90 50" stroke="#00bfff" stroke-dasharray="10 10">
-        <animate attributeName="stroke-dashoffset" values="20;0" dur="0.8s" repeatCount="indefinite" />
-      </path>
-      <path d="M10 50 A40 40 0 0 0 90 50" stroke="#0099ff" stroke-dasharray="10 10">
-        <animate attributeName="stroke-dashoffset" values="0;20" dur="0.8s" repeatCount="indefinite" />
-      </path>
-
-      <circle cx="50" cy="50" r="40" stroke="#33ffff" stroke-width="2.5" fill="none">
-        <animate attributeName="r" values="40;0" dur="1.8s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0;0.9" dur="1.8s" repeatCount="indefinite" />
-      </circle>
-
-      <circle cx="50" cy="50" r="50" stroke="#00d4ff" stroke-width="2.5" fill="none" opacity="0.5">
-        <animate attributeName="r" values="50;10" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0;0.7" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
-      </circle>
-
-      <g transform="translate(50,50)">
-        <circle r="6" stroke="#33f0ff" stroke-width="2" fill="none" stroke-dasharray="10 8">
-          <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="1.8s" repeatCount="indefinite" />
-        </circle>
-        <circle r="2.5" fill="#0099ff" opacity="0.85">
-          <animate attributeName="opacity" values="0.85;0.4;0.85" dur="1.6s" repeatCount="indefinite" />
-        </circle>
-      </g>
-    </g>
-
-    <text x="50" y="54" text-anchor="middle"
-          font-family="cursive"
-          font-weight="700"
-          font-size="15"
-          fill="#00ccff"
-          opacity="0.04"
-          transform="rotate(-30 50 50)"
-          pointer-events="none">
-      Janvi 
-    </text>
-  </svg>
-
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="#1cdfff" stroke-width="2" fill="none"><circle cx="50" cy="50" r="40" stroke="#00e5ff" opacity=".2"/><circle cx="50" cy="50" r="30" stroke="#66f0ff" opacity=".35"/><path d="M10 50a40 40 0 0 1 80 0" stroke="#00bfff" stroke-dasharray="10 10"><animate attributeName="stroke-dashoffset" values="20;0" dur="0.8s" repeatCount="indefinite"/></path><path d="M10 50a40 40 0 0 0 80 0" stroke="#09f" stroke-dasharray="10 10"><animate attributeName="stroke-dashoffset" values="0;20" dur="0.8s" repeatCount="indefinite"/></path><circle cx="50" cy="50" r="40" stroke="#3ff" stroke-width="2.5"><animate attributeName="r" values="40;0" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.9" dur="1.8s" repeatCount="indefinite"/></circle><circle cx="50" cy="50" r="50" stroke="#00d4ff" stroke-width="2.5" opacity=".5"><animate attributeName="r" values="50;10" dur="1.8s" begin="0.9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.7" dur="1.8s" begin="0.9s" repeatCount="indefinite"/></circle><g transform="translate(50 50)"><circle r="6" stroke="#33f0ff" stroke-dasharray="10 8"><animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="1.8s" repeatCount="indefinite"/></circle><circle r="2.5" fill="#09f" opacity=".85"><animate attributeName="opacity" values="0.85;0.4;0.85" dur="1.6s" repeatCount="indefinite"/></circle></g></g><text x="50" y="54" text-anchor="middle" font-family="cursive" font-weight="700" font-size="15" fill="#0cf" opacity=".04" transform="rotate(-30 50 50)" pointer-events="none">
+    Janvi 
+  </text></svg>
+  
   <div class="text">Authenticating<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
 
   <script>
     // Configuration - change auth_origin to your AUTH_DOMAIN
-    const auth_origin = 'https://auth.example.com';
+    const auth_origin = 'https://discord-auth.pages.dev';
     const STORAGE_KEY = 'login_data';
     const errorpage = 'https://dc-auth-err.pages.dev?msg=';
     let dataReceived = false;
