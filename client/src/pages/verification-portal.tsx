@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { cn } from "@/lib/utils"; // If you use classnames helper. Remove otherwise.
 import {
   Users, UserCheck, Home, MessagesSquare, Youtube,
   BookOpen, Shield, Sparkles, Crown, LogOut, BadgeCheck, BadgeAlert
