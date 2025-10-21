@@ -1,335 +1,245 @@
-import { useInfoData } from "@/lib/info-data";
-import { defaultGuildData, defaultYoutubeData } from "@/lib/default-data";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Users, 
-  UserCheck, 
-  Home, 
+import { useEffect, useState } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import {
+  Users,
+  UserCheck,
+  Home,
   MessagesSquare,
-  Youtube, 
-  BookOpen, 
+  Youtube,
+  BookOpen,
   Shield,
   Sparkles,
-  Crown
+  Crown,
+  LogOut,
+  BadgeCheck,
+  BadgeAlert,
 } from "lucide-react";
+import { discord } from "@/components/icons";
+import { getLoginData, isLoggedIn, logout } from "@/lib/login";
 
 export function VerificationPortal() {
-  const {
-    data,
-    isLoading,
-    error,
-    isConnected,
-    refetch
-  } = useInfoData();
-  
-  // Error state for failed data loading
-  if (error && !data) {
+  const [userData, setUserData] = useState(getLoginData());
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+    setUserData(getLoginData());
+    setLoading(false);
+  }, []);
+
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to logout?")) {
+      logout();
+      setUserData(null);
+    }
+  };
+
+  // Not logged in
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-950" data-testid="error-portal">
-        <div className="text-center max-w-md mx-auto px-6">
-          <div className="mb-6">
-            <Shield className="w-16 h-16 text-neon-orange mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-white mb-2">Portal Unavailable</h1>
-            <p className="text-dark-300 mb-4">
-              We're having trouble loading the verification portal. Please try again later.
-            </p>
-          </div>
-          <div className="space-y-3">
-            <Button 
-              onClick={() => refetch()} 
-              className="bg-neon-purple hover:bg-neon-purple/80 text-white w-full"
-              data-testid="button-retry"
-            >
-              Try Again
-            </Button>
-            <Button 
-              onClick={() => window.location.href = '/'} 
-              variant="outline"
-              className="border-dark-600 text-dark-300 hover:text-white w-full"
-              data-testid="button-home"
-            >
-              Return Home
-            </Button>
-          </div>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-[#101010] text-white font-[var(--font-family)]">
+        <span className="flex items-center gap-2 animate-pulse text-lg">
+          <Shield className="w-6 h-6 text-indigo-500" />
+          Loading Portal...
+        </span>
       </div>
     );
   }
 
-  return (
-    <>
-      {/* Background Pattern */}
-      <div className="fixed inset-0 bg-grain pointer-events-none"></div>
-      
-      {/* Main Content */}
-      <main className="min-h-screen" data-testid="portal-main">
-        {/* Header */}
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-dark-950/80 backdrop-blur-md" data-testid="portal-header">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <div className="flex items-center space-x-3">
-                <Avatar className="w-8 h-8 transition-all duration-500 ease-in-out" data-testid="img-server-logo">
-                  <AvatarImage src={data?.guild?.iconUrl || defaultGuildData.iconUrl} alt="Server Icon" />
-                  <AvatarFallback>{(data?.guild?.name || defaultGuildData.name).charAt(0)}</AvatarFallback>
-                </Avatar>
-                <h1 className="text-xl font-bold text-white transition-all duration-500 ease-in-out" data-testid="text-server-name">
-                  {data?.guild?.name || defaultGuildData.name}
-                </h1>
-              </div>
-              
-              {/* Status Indicator */}
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-neon-emerald' : 'bg-neon-orange'}`} />
-                <span className="text-xs text-dark-300">
-                  {isConnected ? 'Connected' : 'Disconnected'}
-                </span>
-              </div>
-            </div>
+  if (!isLoggedIn() || !userData) {
+    return (
+      <div
+        data-aos="fade-up"
+        className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#18182f] via-[#181926] to-[#0d0d13] text-white font-[var(--font-family)] px-4"
+      >
+        <div className="flex flex-col items-center p-8 rounded-3xl shadow-xl bg-[#18182faa] backdrop-blur">
+          <div className="mb-6" data-aos="zoom-in">
+            <span className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#5865F2]/20 shadow-lg">
+              {discord ? (
+                discord({ className: "w-12 h-12 text-[#5865F2]" })
+              ) : (
+                <Shield className="w-12 h-12 text-indigo-500" />
+              )}
+            </span>
           </div>
-        </header>
+          <h1 className="text-3xl font-extrabold mb-2 tracking-tight" data-aos="fade-down">
+            Welcome to Dreamer's Portal
+          </h1>
+          <p className="text-md text-gray-400 mb-6 max-w-md" data-aos="fade-up">
+            Login with Discord to access your portal, verify your account, and unlock exclusive rewards!
+          </p>
+          <a
+            href="https://discord-auth.pages.dev?to=/portal"
+            data-aos="zoom-in-up"
+            className="flex items-center gap-2 bg-[#5865F2] hover:bg-[#404eed] transition px-7 py-3 rounded-2xl shadow-lg text-white font-bold text-lg"
+          >
+            {discord ? discord({ className: "w-6 h-6" }) : null}
+            Login with Discord
+          </a>
+        </div>
 
-        {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center px-4 py-8">
-          <div className="max-w-2xl w-full text-center space-y-8">
-            
-            {/* Main Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-welcome">
-              <CardContent className="p-8">
-                {/* Server Icon */}
-                <div className="mb-6">
-                  <Avatar className="w-20 h-20 mx-auto shadow-lg ring-2 ring-neon-purple/20 transition-all duration-500 ease-in-out" data-testid="img-server-icon-large">
-                    <AvatarImage src={data?.guild?.iconUrl || defaultGuildData.iconUrl} alt="Server Icon" />
-                    <AvatarFallback className="text-2xl">{(data?.guild?.name || defaultGuildData.name).charAt(0)}</AvatarFallback>
-                  </Avatar>
-                </div>
-                
-                {/* Title */}
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 transition-all duration-500 ease-in-out" data-testid="text-welcome-title">
-                  Welcome to{' '}
-                  <span className="gradient-text">
-                    {data?.guild?.name || defaultGuildData.name}
-                  </span>
-                  {' '}Verification Portal
-                </h3>
-                
-                {/* Description */}
-                <p className="text-dark-300 text-lg mb-8 leading-relaxed" data-testid="text-description">
-                  This is the official verification portal for our Discord community. 
-                  To access exclusive Rewards, please Verify your YouTube.
-                </p>
-                
-                {/* Server Statistics */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                  <Card className="bg-dark-700/50 border-dark-600" data-testid="card-member-stats">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <Users className="w-8 h-8 text-neon-cyan" />
-                        <div>
-                          <div className="text-2xl font-bold text-neon-cyan transition-all duration-500 ease-in-out" data-testid="text-member-count">
-                            {data?.guild?.memberCountFormatted || defaultGuildData.memberCountFormatted}
-                          </div>
-                          <div className="text-dark-300 text-sm">Total Members</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-dark-700/50 border-dark-600" data-testid="card-verified-stats">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <UserCheck className="w-8 h-8 text-neon-emerald" />
-                        <div>
-                          <div className="text-2xl font-bold text-neon-emerald transition-all duration-500 ease-in-out" data-testid="text-verified-count">
-                            {data?.guild?.verifiedUserCountFormatted || defaultGuildData.verifiedUserCountFormatted}
-                          </div>
-                          <div className="text-dark-300 text-sm">Verified Members</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    className="w-full sm:min-w-[200px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-blue-500/30 transform hover:scale-105 active:scale-95 transition-all duration-200 border-0 text-base md:text-lg"
-                    onClick={() => window.open('https://joindc.pages.dev', '_blank', 'noopener,noreferrer')}
-                    data-testid="button-join-discord"
-                  >
-                    <MessagesSquare className="w-5 h-5 mr-3" />
-                    Join Discord
-                  </Button>
-                  
-                  <a href="/" className="block">
-                    <Button 
-                      variant="outline" 
-                      className="w-full sm:min-w-[200px] border-2 border-gray-600 text-gray-300 hover:text-white hover:border-blue-500 hover:bg-blue-500/10 font-semibold py-4 px-8 rounded-2xl transition-all duration-200 hover:shadow-lg text-base md:text-lg"
-                      data-testid="button-go-home"
-                    >
-                      <Home className="w-5 h-5 mr-3" />
-                      Go to Homepage
-                    </Button>
-                  </a>
-                </div>
-                
-                {/* Links */}
-                <div className="mt-8 pt-6 border-t border-white/10">
-                  <div className="flex flex-wrap justify-center gap-6 text-sm">
-                    <a href="/guide" className="text-dark-400 hover:text-white transition-colors inline-flex items-center cursor-help" data-testid="link-guide">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Verification Guide
-                    </a>
-                    <a href="/portal/privacy-policy" className="text-dark-400 hover:text-white transition-colors inline-flex items-center" data-testid="link-privacy">
-                      <Shield className="w-4 h-4 mr-2" />
-                      Privacy Policy
-                    </a>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* How to Verify Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-how-to-verify">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <Sparkles className="w-6 h-6 text-neon-purple mr-2" />
-                  <h3 className="text-xl font-semibold text-white">How to Verify?</h3>
-                </div>
-                <p className="text-dark-300 mb-4">
-                  Visit the{' '}
-                  <a href="/guide" className="text-neon-emerald font-semibold hover:text-neon-emerald/80 hover:underline transition cursor-help" data-testid="link-guide-inline">
-                    Verification Guide
-                  </a>
-                  {' '}if you need help.
-                  <br />
-                  Contact our Moderators on Dreamer's Land Discord Server for assistance.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <a href="/guide">
-                    <Button variant="outline" className="border-dark-600 text-dark-300 hover:text-white cursor-help" data-testid="button-how-to-verify">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      How to Verify
-                    </Button>
-                  </a>
-                  <a href="/">
-                    <Button variant="ghost" className="text-dark-300 hover:text-white" data-testid="button-visit-main">
-                      <Home className="w-4 h-4 mr-2" />
-                      Visit Homepage
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* YouTube Channel Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-youtube-channel">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <Youtube className="w-6 h-6 text-red-500 mr-2" />
-                  <h3 className="text-xl font-semibold text-white">YouTube Channel</h3>
-                </div>
-                
-                <div className="flex flex-wrap items-center gap-4">
-                  {data?.youtube ? (
-                    <>
-                      <Avatar className="w-16 h-16" data-testid="img-youtube-avatar">
-                        <AvatarImage src={data.youtube.logoUrl} alt="YouTube Channel" />
-                        <AvatarFallback>
-                          <Youtube className="w-8 h-8 text-red-500" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-[120px] text-left">
-                        <h4 className="text-lg font-semibold text-white" data-testid="text-youtube-name">
-                          {data.youtube.channelTitle}
-                        </h4>
-                        <p className="text-dark-300" data-testid="text-youtube-subscribers">
-                          {data.youtube.subscriberCountFormatted ? `${data.youtube.subscriberCountFormatted} subs` : 'NA'}
-                        </p>
-                      </div>
-                      <Button 
-                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 shrink-0"
-                        onClick={() => window.open(data.youtube!.channelUrl, '_blank', 'noopener,noreferrer')}
-                        data-testid="button-subscribe-youtube"
-                      >
-                        <Youtube className="w-4 h-4 mr-2" />
-                        Subscribe
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Avatar className="w-16 h-16 transition-all duration-500 ease-in-out" data-testid="img-youtube-avatar">
-                        <AvatarImage src={defaultYoutubeData.logoUrl} alt="YouTube Channel" />
-                        <AvatarFallback>
-                          <Youtube className="w-8 h-8 text-red-500" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-[120px] text-left">
-                        <h4 className="text-lg font-semibold text-white transition-all duration-500 ease-in-out" data-testid="text-youtube-name">
-                          {defaultYoutubeData.channelTitle}
-                        </h4>
-                        <p className="text-dark-300 transition-all duration-500 ease-in-out" data-testid="text-youtube-subscribers">
-                          {defaultYoutubeData.subscriberCountFormatted} subs
-                        </p>
-                      </div>
-                      <Button 
-                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 shrink-0"
-                        onClick={() => window.open(defaultYoutubeData.channelUrl, '_blank', 'noopener,noreferrer')}
-                        data-testid="button-subscribe-youtube"
-                      >
-                        <Youtube className="w-4 h-4 mr-2" />
-                        Subscribe
-                      </Button>
-                    </>
-                  )}
-                  {!data?.youtube && (
-                    <div className="text-center text-dark-400 w-full hidden">
-                      YouTube channel information unavailable
-                    </div>
-                  )}
-                </div>
-                
-                <p className="text-dark-400 text-sm mt-4 text-center" data-testid="text-subscribe-message">
-                  <Crown className="w-4 h-4 inline-block mr-1 text-neon-purple" />
-                  Subscribe to unlock exclusive Discord rewards!
-                </p>
-              </CardContent>
-            </Card>
+        <footer className="mt-10 text-gray-500 text-xs" data-aos="fade-up">
+          &copy; {new Date().getFullYear()} Dreamer's Land • All Rights Reserved
+        </footer>
+      </div>
+    );
+  }
+
+  // Logged in state
+  const {
+    userid, username, name, avatar, avatar_decoration_data, verified,
+    banner, accent_color,
+  } = userData;
+
+  const avatarUrl = `https://cdn.discordapp.com/avatars/${userid}/${avatar}.webp?size=256`;
+  const decorationUrl = avatar_decoration_data
+    ? `https://cdn.discordapp.com/avatar-decoration-presets/${avatar_decoration_data.asset}.png`
+    : null;
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#1a1a2e] via-[#0f3460] to-[#16213e] text-white font-[var(--font-family)] flex flex-col items-center overflow-x-hidden">
+      {/* Top banner and header */}
+      <header className="w-full flex flex-col items-center justify-center bg-[#232347dd] py-6 shadow-md" data-aos="fade-down">
+        <div className="flex items-center space-x-4">
+          <div className="relative w-20 h-20">
+            <img
+              src={avatarUrl}
+              alt={username}
+              className="w-20 h-20 rounded-full border-4 border-[#5865F2] shadow-lg object-cover"
+            />
+            {decorationUrl && (
+              <img
+                src={decorationUrl}
+                alt="Decoration"
+                className="absolute inset-0 w-20 h-20 rounded-full pointer-events-none opacity-90"
+              />
+            )}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              {name || username}
+              {verified ? (
+                <BadgeCheck className="w-6 h-6 text-green-400" title="Verified" />
+              ) : (
+                <BadgeAlert className="w-6 h-6 text-yellow-400 animate-bounce" title="Unverified" />
+              )}
+            </h2>
+            <span className="text-md text-neutral-400"> @{username} </span>
+          </div>
+        </div>
+        <div className="flex gap-4 mt-5">
+          {verified ? (
+            <span className="inline-flex items-center px-4 py-1 rounded-full bg-green-700/70 text-green-200 font-semibold" data-aos="zoom-in">
+              <BadgeCheck className="w-5 h-5 mr-2" /> Verified
+            </span>
+          ) : (
+            <a
+              href="/verify"
+              className="inline-flex items-center px-4 py-1 rounded-full bg-yellow-600/80 text-white font-semibold hover:bg-yellow-700 shadow transition"
+              data-aos="zoom-in"
+            >
+              <BadgeAlert className="w-5 h-5 mr-2" /> Verify Account
+            </a>
+          )}
+
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center px-4 py-1 rounded-full bg-red-500/80 text-white font-semibold hover:bg-red-600 shadow transition gap-2"
+            data-aos="zoom-in"
+          >
+            <LogOut className="w-5 h-5 mr-2" /> Logout
+          </button>
+        </div>
+      </header>
+
+      {/* Info Cards Section */}
+      <section className="w-full flex flex-col items-center justify-center mt-10 gap-7">
+        {/* Server + Stats */}
+        <div className="flex flex-wrap justify-center gap-8 w-full max-w-4xl">
+          <div className="flex flex-col bg-[#181826bb] p-6 rounded-2xl shadow-lg min-w-[270px] items-center" data-aos="fade-right">
+            <Users className="w-8 h-8 text-indigo-400 mb-2" />
+            <span className="font-bold text-2xl">2,500+</span>
+            <span className="text-gray-400 text-xs">Total Members</span>
+          </div>
+          <div className="flex flex-col bg-[#181826bb] p-6 rounded-2xl shadow-lg min-w-[270px] items-center" data-aos="fade-up">
+            <UserCheck className="w-8 h-8 text-green-400 mb-2" />
+            <span className="font-bold text-2xl">1,200+</span>
+            <span className="text-gray-400 text-xs">Verified Members</span>
+          </div>
+          <div className="flex flex-col bg-[#181826bb] p-6 rounded-2xl shadow-lg min-w-[270px] items-center" data-aos="fade-left">
+            <Sparkles className="w-8 h-8 text-purple-400 mb-2" />
+            <span className="font-bold text-2xl">Rewards + Perks</span>
+            <span className="text-gray-400 text-xs">Exclusive Roles</span>
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="border-t border-white/10 bg-dark-950/80 backdrop-blur-md" data-testid="portal-footer">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between">
-              <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-                {data?.guild?.iconUrl && (
-                  <Avatar className="w-6 h-6" data-testid="img-footer-logo">
-                    <AvatarImage src={data.guild.iconUrl} alt="Server Icon" />
-                    <AvatarFallback>{data.guild.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                )}
-                <span className="text-dark-400 text-sm" data-testid="text-copyright">
-                  © 2025 {data?.guild?.name || "Dreamer's Land"}
-                </span>
-              </div>
-              <div className="flex space-x-6 text-sm">
-                <a href="/" className="text-dark-400 hover:text-white transition-colors" data-testid="link-footer-home">
-                  Homepage
-                </a>
-                <a href="/guide" className="text-dark-400 hover:text-white transition-colors cursor-help" data-testid="link-footer-guide">
-                  Guide
-                </a>
-                <a href="/portal/privacy-policy" className="text-dark-400 hover:text-white transition-colors cursor-help" data-testid="link-footer-privacy">
-                  Privacy
-                </a>
-              </div>
-            </div>
+        {/* YouTube Channel Section */}
+        <div className="flex flex-col bg-[#181826bb] rounded-2xl max-w-4xl w-full px-8 py-6 shadow-xl items-center" data-aos="zoom-in">
+          <div className="flex items-center gap-4 mb-4">
+            <Youtube className="w-6 h-6 text-red-500" />
+            <span className="font-semibold text-lg">Dreamer's YouTube</span>
+            <Crown className="w-5 h-5 text-purple-400 ml-2" />
           </div>
-        </footer>
-      </main>
-    </>
+          <div className="flex flex-wrap items-center justify-center gap-7">
+            <img
+              src="https://yt3.ggpht.com/ytc/AKedOLRnTqvlWmRkgkQ2JtfWEYpKnM8sTfXZIHd6TDL=s88-c-k-c0x00ffffff-no-rj"
+              className="rounded-full w-16 h-16 shadow-lg"
+              alt="YouTube Channel"
+            />
+            <div>
+              <span className="font-bold block text-xl">Dreamer's Land</span>
+              <span className="block text-gray-400">115k+ subscribers</span>
+            </div>
+            <a
+              href="https://www.youtube.com/@dreamersland"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md mt-2 transition hover:brightness-110"
+            >
+              <Youtube className="w-5 h-5" />
+              Subscribe
+            </a>
+          </div>
+          <span className="block mt-4 text-gray-500 text-xs">
+            Subscribe to unlock exclusive Discord rewards!
+          </span>
+        </div>
+
+        {/* Portal Actions Section */}
+        <div className="flex flex-col bg-[#181826bb] py-6 px-10 rounded-2xl shadow-lg items-center max-w-4xl w-full" data-aos="fade-up">
+          <div className="flex gap-5 mb-4">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl shadow text-white font-bold hover:brightness-110"
+            >
+              <Home className="w-5 h-5" /> Home
+            </a>
+            <a
+              href="https://ff-5d8.pages.dev/"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-tr from-cyan-600 to-teal-600 rounded-xl shadow text-white font-bold hover:brightness-110"
+            >
+              <MessagesSquare className="w-5 h-5" /> Join Discord
+            </a>
+            <a
+              href="/guide"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-tr from-emerald-600 to-lime-600 rounded-xl shadow text-white font-bold hover:brightness-110"
+            >
+              <BookOpen className="w-5 h-5" /> Guide
+            </a>
+            <a
+              href="/portal/privacy-policy"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-tr from-gray-700 to-black rounded-xl shadow text-white font-bold hover:brightness-110"
+            >
+              <Shield className="w-5 h-5" /> Privacy
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="mt-10 mb-6 text-center text-sm text-gray-400" data-aos="fade-up">
+        &copy; {new Date().getFullYear()} Dreamer's Land. All rights reserved.
+      </footer>
+    </main>
   );
 }
