@@ -6,7 +6,7 @@ export type AvatarDecorationData = {
 };
 
 export type LoginData = {
-  userid: string;
+  userid: number;
   username: string;
   name: string;
   avatar: string;
