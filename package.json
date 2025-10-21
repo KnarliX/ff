@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "check": "tsc"
   },
+  "packageManager": "pnpm@10.19.0",
   "dependencies": {
     "@radix-ui/react-aspect-ratio": "^1.1.3",
     "@radix-ui/react-avatar": "^1.1.4",
