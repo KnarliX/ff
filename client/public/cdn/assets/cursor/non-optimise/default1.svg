@@ -12,6 +12,18 @@
       <stop offset="60%" stop-color="#766DFF"/>
       <stop offset="100%" stop-color="#5a23ba"/>
     </radialGradient>
+    <!-- Text Gradient Fill -->
+    <linearGradient id="text_grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe072"/>
+      <stop offset="50%" stop-color="#f797fc"/>
+      <stop offset="100%" stop-color="#99fff7"/>
+    </linearGradient>
+    <!-- Glowing Stroke for text -->
+    <radialGradient id="text_stroke" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffccf"/>
+      <stop offset="80%" stop-color="#ff61ad"/>
+      <stop offset="100%" stop-color="#32c6ff"/>
+    </radialGradient>
     <!-- Curve path for text -->
     <path id="text-arc" d="M3 8 Q7 4 11 8" fill="none"/>
   </defs>
@@ -28,18 +40,29 @@
     />
     <!-- Center blob decoration: Dreamy nebula/clouds -->
     <ellipse 
-      cx="3.2" cy="3.2" rx="1.5" ry="1.5"
+      cx="3.2" cy="3.2" rx="1.25" ry="1.05"
       fill="url(#dream_blob)"
       filter="url(#blurMe)"
       opacity="0.96"
     />
+    <!-- Soft swirling cloud shapes (around blob) -->
+    <ellipse cx="3.40" cy="3.0" rx="0.40" ry="0.18" fill="#c6f7ff" opacity="0.33"/>
+    <ellipse cx="2.85" cy="3.30" rx="0.27" ry="0.13" fill="#fff9cf" opacity="0.34"/>
+    <ellipse cx="3.15" cy="2.70" rx="0.18" ry="0.09" fill="#fd6bff" opacity="0.27"/>
+    <!-- Sparkle dots in blob -->
+    <circle cx="3.22" cy="3.28" r="0.08" fill="#fff" opacity="0.78"/>
+    <circle cx="3.05" cy="3.10" r="0.06" fill="#ffe072" opacity="0.88"/>
 
-    <!-- Bent Text -->
+    <!-- Bent Text with gradient fill & glowing stroke -->
     <text 
-      font-family="robot"
+      font-family="Alfa Slab One, cursive"
       font-size="3"
       font-weight="700"
-      fill="#00FFFF"
+      fill="url(#text_grad)"
+      stroke="url(#text_stroke)"
+      stroke-width="0.23"
+      paint-order="stroke"
+      pointer-events="none"
       text-anchor="middle"
       transform="rotate(-45, 8.6, 6.5)"
     >
@@ -48,16 +71,16 @@
       </textPath>
     </text>
      <!-- Hotspot marker (red dot) -->
-<!-- <circle 
-  id="hotspot-marker"
-  cx="1"   
-  cy="1"  
-  r="0.6" 
-  fill="red"
-  opacity="0.5"
-/> -->
+     <!--<circle
+     id="hotspot-marker"
+     cx="1"
+     cy="1"
+     r="0.6"
+     fill="red"
+     opacity="0.5"
+     /> -->
   </g>
-  <!-- blur filter for softness-->
+  <!-- Optional: SVG blur filter for softness-->
   <filter id="blurMe" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="0.11" />
   </filter>
