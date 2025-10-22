@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { getLoginData, logout, LoginData } from "@/lib/login";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, AlertCircle, LogOut, X } from "lucide-react";
+import { CheckCircle2, LogOut, BadgeCheck, BadgeAlert } from "lucide-react";
 
 interface UserProfilePopupProps {
   loginData: LoginData;
@@ -135,12 +135,12 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
               <div className="flex items-center gap-2 mb-4">
                 {loginData.verified ? (
                   <div className="flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-green-400" />
+                    <BadgeCheck className="w-5 h-5 text-green-400" />
                     <span className="text-green-400 font-semibold">Verified</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-full">
-                    <AlertCircle className="w-5 h-5 text-orange-400" />
+                    <BadgeAlert className="w-5 h-5 text-orange-400" />
                     <span className="text-orange-400 font-semibold">Not Verified</span>
                   </div>
                 )}

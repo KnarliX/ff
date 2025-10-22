@@ -15,7 +15,7 @@ import {
   BookOpen,
   Shield,
   Sparkles,
-  CheckCircle2
+  UserCheck
 } from "lucide-react";
 import { discord } from "@/components/icons";
 import { initializeAnimations, checkReducedMotion } from "@/lib/meta-utils";
@@ -232,7 +232,7 @@ export function VerificationPortal() {
                         size="lg"
                         className="w-full sm:min-w-[240px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-purple hover:from-neon-purple/80 hover:via-neon-pink/80 hover:to-neon-purple/80 text-white font-bold py-6 px-10 text-lg rounded-2xl shadow-2xl shadow-neon-purple/40 hover:shadow-neon-purple/60 transform hover:scale-105 transition-all duration-300 border-0"
                       >
-                        <CheckCircle2 className="w-6 h-6 mr-3" />
+                        <UserCheck className="w-6 h-6 mr-3" />
                         Verify Now
                       </Button>
                     </a>
