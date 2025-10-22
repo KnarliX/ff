@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { getLoginData, logout, LoginData } from "@/lib/login";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
