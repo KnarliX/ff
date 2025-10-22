@@ -18,20 +18,18 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { discord } from "@/components/icons";
-import AOS from "aos";
+import { initializeAnimations, checkReducedMotion } from "@/lib/meta-utils";
+import "aos/dist/aos.css";
 
 export function VerificationPortal() {
   const { data, isLoading, error, isConnected, refetch } = useInfoData();
   const [loginData, setLoginData] = useState<LoginData | null>(getLoginData());
 
   useEffect(() => {
-    // Initialize AOS (only once)
-    AOS.init({
-      duration: 800,
-      easing: "ease-out-cubic",
-      once: true,
-      offset: 50,
-    });
+    // Initialize AOS animations
+    if (!checkReducedMotion()) {
+      initializeAnimations();
+    }
   }, []);
 
   // Error state for failed data loading
