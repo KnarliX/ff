@@ -25,9 +25,12 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
   };
 
   const confirmLogout = () => {
-    onLogout();
     setShowLogoutConfirm(false);
     setIsOpen(false);
+    // Give UI time to update before logout
+    setTimeout(() => {
+      onLogout();
+    }, 100);
   };
 
   const cancelLogout = () => {
