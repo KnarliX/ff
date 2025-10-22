@@ -4,7 +4,7 @@ import { defaultGuildData } from "@/lib/default-data";
 import { getLoginData, LoginData } from "@/lib/login";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserProfileButton } from "@/components/user-profile-popup";
+import { UserProfileButton } from "@/components/user-profile";
 import { YoutubeSection } from "@/components/youtube-section";
 import { VerificationFooter } from "@/components/verification-footer";
 import {
