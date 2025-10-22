@@ -1,34 +1,47 @@
+import { useEffect, useState } from "react";
 import { useInfoData } from "@/lib/info-data";
-import { defaultGuildData, defaultYoutubeData } from "@/lib/default-data";
+import { defaultGuildData } from "@/lib/default-data";
+import { getLoginData, LoginData } from "@/lib/login";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Users, 
-  UserCheck, 
-  Home, 
+import { UserProfileButton } from "@/components/user-profile-popup";
+import { YoutubeSection } from "@/components/youtube-section";
+import { VerificationFooter } from "@/components/verification-footer";
+import {
+  Users,
+  UserCheck,
+  Home,
   MessagesSquare,
-  Youtube, 
-  BookOpen, 
+  BookOpen,
   Shield,
   Sparkles,
-  Crown
+  CheckCircle2,
+  LogIn,
 } from "lucide-react";
-import { discord } from "@/components/icons";
+import AOS from "aos";
 
 export function VerificationPortal() {
-  const {
-    data,
-    isLoading,
-    error,
-    isConnected,
-    refetch
-  } = useInfoData();
-  
+  const { data, isLoading, error, isConnected, refetch } = useInfoData();
+  const [loginData, setLoginData] = useState<LoginData | null>(null);
+
+  useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: "ease-out-cubic",
+      once: true,
+      offset: 50,
+    });
+
+    // Check login status
+    const userData = getLoginData();
+    setLoginData(userData);
+  }, []);
+
   // Error state for failed data loading
   if (error && !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-950" data-testid="error-portal">
+      <div className="min-h-screen flex items-center justify-center bg-dark-950">
         <div className="text-center max-w-md mx-auto px-6">
           <div className="mb-6">
             <Shield className="w-16 h-16 text-neon-orange mx-auto mb-4" />
@@ -38,18 +51,16 @@ export function VerificationPortal() {
             </p>
           </div>
           <div className="space-y-3">
-            <Button 
-              onClick={() => refetch()} 
+            <Button
+              onClick={() => refetch()}
               className="bg-neon-purple hover:bg-neon-purple/80 text-white w-full"
-              data-testid="button-retry"
             >
               Try Again
             </Button>
-            <Button 
-              onClick={() => window.location.href = '/'} 
+            <Button
+              onClick={() => (window.location.href = "/")}
               variant="outline"
               className="border-dark-600 text-dark-300 hover:text-white w-full"
-              data-testid="button-home"
             >
               Return Home
             </Button>
@@ -59,277 +70,248 @@ export function VerificationPortal() {
     );
   }
 
+  const isLoggedIn = !!loginData;
+  const isVerified = loginData?.verified || false;
+
   return (
     <>
       {/* Background Pattern */}
       <div className="fixed inset-0 bg-grain pointer-events-none"></div>
-      
+
       {/* Main Content */}
-      <main className="min-h-screen" data-testid="portal-main">
+      <main className="min-h-screen flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-dark-950/80 backdrop-blur-md" data-testid="portal-header">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-dark-950/80 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
               <div className="flex items-center space-x-3">
-                <Avatar className="w-8 h-8 transition-all duration-500 ease-in-out" data-testid="img-server-logo">
-                  <AvatarImage src={data?.guild?.iconUrl || defaultGuildData.iconUrl} alt="Server Icon" />
-                  <AvatarFallback>{(data?.guild?.name || defaultGuildData.name).charAt(0)}</AvatarFallback>
+                <Avatar className="w-10 h-10 transition-all duration-300 hover:scale-110">
+                  <AvatarImage
+                    src={data?.guild?.iconUrl || defaultGuildData.iconUrl}
+                    alt="Server Icon"
+                  />
+                  <AvatarFallback>
+                    {(data?.guild?.name || defaultGuildData.name).charAt(0)}
+                  </AvatarFallback>
                 </Avatar>
-                <h1 className="text-xl font-bold text-white transition-all duration-500 ease-in-out" data-testid="text-server-name">
+                <h1 className="text-xl font-bold text-white">
                   {data?.guild?.name || defaultGuildData.name}
                 </h1>
               </div>
-              
-              {/* Status Indicator */}
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-neon-emerald' : 'bg-neon-orange'}`} />
-                <span className="text-xs text-dark-300">
-                  {isConnected ? 'Connected' : 'Disconnected'}
-                </span>
+
+              {/* Right Side - Status & Profile */}
+              <div className="flex items-center space-x-4">
+                {/* Connection Status */}
+                <div className="hidden sm:flex items-center space-x-2">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      isConnected ? "bg-neon-emerald" : "bg-neon-orange"
+                    }`}
+                  />
+                  <span className="text-xs text-dark-300">
+                    {isConnected ? "Connected" : "Disconnected"}
+                  </span>
+                </div>
+
+                {/* User Profile Button - only show when logged in */}
+                {isLoggedIn && <UserProfileButton />}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center px-4 py-8">
-          <div className="max-w-2xl w-full text-center space-y-8">
-            
-            {/* Main Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-welcome">
-              <CardContent className="p-8">
-                {/* Server Icon */}
-                <div className="mb-6">
-                  <Avatar className="w-20 h-20 mx-auto shadow-lg ring-2 ring-neon-purple/20 transition-all duration-500 ease-in-out" data-testid="img-server-icon-large">
-                    <AvatarImage src={data?.guild?.iconUrl || defaultGuildData.iconUrl} alt="Server Icon" />
-                    <AvatarFallback className="text-2xl">{(data?.guild?.name || defaultGuildData.name).charAt(0)}</AvatarFallback>
-                  </Avatar>
-                </div>
-                
-                {/* Title */}
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 transition-all duration-500 ease-in-out" data-testid="text-welcome-title">
-                  Welcome to{' '}
-                  <span className="gradient-text">
-                    {data?.guild?.name || defaultGuildData.name}
-                  </span>
-                  {' '}Verification Portal
-                </h3>
-                
-                {/* Description */}
-                <p className="text-dark-300 text-lg mb-8 leading-relaxed" data-testid="text-description">
-                  This is the official verification portal for our Discord community. 
-                  To access exclusive Rewards, please Verify your YouTube.
-                </p>
-                
-                {/* Server Statistics */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                  <Card className="bg-dark-700/50 border-dark-600" data-testid="card-member-stats">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <Users className="w-8 h-8 text-neon-cyan" />
-                        <div>
-                          <div className="text-2xl font-bold text-neon-cyan transition-all duration-500 ease-in-out" data-testid="text-member-count">
-                            {data?.guild?.memberCountFormatted || defaultGuildData.memberCountFormatted}
-                          </div>
-                          <div className="text-dark-300 text-sm">Total Members</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="bg-dark-700/50 border-dark-600" data-testid="card-verified-stats">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <UserCheck className="w-8 h-8 text-neon-emerald" />
-                        <div>
-                          <div className="text-2xl font-bold text-neon-emerald transition-all duration-500 ease-in-out" data-testid="text-verified-count">
-                            {data?.guild?.verifiedUserCountFormatted || defaultGuildData.verifiedUserCountFormatted}
-                          </div>
-                          <div className="text-dark-300 text-sm">Verified Members</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    className="w-full sm:min-w-[200px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-blue-500/30 transform hover:scale-105 active:scale-95 transition-all duration-200 border-0 text-base md:text-lg"
-                    onClick={() => window.open('https://joindc.pages.dev', '_blank', 'noopener,noreferrer')}
-                    data-testid="button-join-discord"
-                  >
-                    <MessagesSquare className="w-5 h-5 mr-3" />
-                    Join Discord
-                  </Button>
-                  
-                  <a href="/" className="block">
-                    <Button 
-                      variant="outline" 
-                      className="w-full sm:min-w-[200px] border-2 border-gray-600 text-gray-300 hover:text-white hover:border-blue-500 hover:bg-blue-500/10 font-semibold py-4 px-8 rounded-2xl transition-all duration-200 hover:shadow-lg text-base md:text-lg"
-                      data-testid="button-go-home"
-                    >
-                      <Home className="w-5 h-5 mr-3" />
-                      Go to Homepage
-                    </Button>
-                  </a>
-                </div>
-                
-                {/* Links */}
-                <div className="mt-8 pt-6 border-t border-white/10">
-                  <div className="flex flex-wrap justify-center gap-6 text-sm">
-                    <a href="/guide" className="text-dark-400 hover:text-white transition-colors inline-flex items-center cursor-help" data-testid="link-guide">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Verification Guide
-                    </a>
-                    <a href="/portal/privacy-policy" className="text-dark-400 hover:text-white transition-colors inline-flex items-center" data-testid="link-privacy">
-                      <Shield className="w-4 h-4 mr-2" />
-                      Privacy Policy
-                    </a>
+        {/* Main Content Area */}
+        <div className="flex-1 px-4 py-12">
+          <div className="max-w-5xl mx-auto space-y-12">
+            {/* Hero Section */}
+            <div className="text-center space-y-6" data-aos="fade-down">
+              {/* Server Icon */}
+              <div className="flex justify-center mb-6">
+                <Avatar className="w-24 h-24 md:w-32 md:h-32 shadow-2xl ring-4 ring-neon-purple/30 hover:ring-neon-purple/50 transition-all duration-500 hover:scale-110">
+                  <AvatarImage
+                    src={data?.guild?.iconUrl || defaultGuildData.iconUrl}
+                    alt="Server Icon"
+                  />
+                  <AvatarFallback className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-neon-purple to-neon-cyan text-white">
+                    {(data?.guild?.name || defaultGuildData.name).charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                Welcome to{" "}
+                <span className="gradient-text">
+                  {data?.guild?.name || defaultGuildData.name}
+                </span>
+              </h2>
+
+              {/* Subtitle */}
+              <p className="text-xl md:text-2xl text-dark-300 max-w-3xl mx-auto leading-relaxed">
+                Official verification portal for our Discord community.
+                <br />
+                <span className="text-neon-emerald font-semibold">
+                  Verify your YouTube to unlock exclusive rewards!
+                </span>
+              </p>
+            </div>
+
+            {/* Server Statistics */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto"
+              data-aos="fade-up"
+            >
+              {/* Total Members */}
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-950/30 via-dark-800/40 to-dark-900/60 border border-cyan-900/30 p-6 backdrop-blur-md group hover:border-cyan-500/50 transition-all duration-300">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-neon-cyan/10 rounded-full blur-3xl group-hover:bg-neon-cyan/20 transition-all duration-300"></div>
+                <div className="relative flex items-center space-x-4">
+                  <div className="p-4 bg-cyan-500/20 rounded-xl">
+                    <Users className="w-10 h-10 text-neon-cyan" />
+                  </div>
+                  <div>
+                    <div className="text-3xl md:text-4xl font-bold text-neon-cyan">
+                      {data?.guild?.memberCountFormatted || defaultGuildData.memberCountFormatted}
+                    </div>
+                    <div className="text-dark-300 text-lg">Total Members</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-            
-            {/* How to Verify Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-how-to-verify">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <Sparkles className="w-6 h-6 text-neon-purple mr-2" />
-                  <h3 className="text-xl font-semibold text-white">How to Verify?</h3>
+              </div>
+
+              {/* Verified Members */}
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/30 via-dark-800/40 to-dark-900/60 border border-emerald-900/30 p-6 backdrop-blur-md group hover:border-emerald-500/50 transition-all duration-300">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-neon-emerald/10 rounded-full blur-3xl group-hover:bg-neon-emerald/20 transition-all duration-300"></div>
+                <div className="relative flex items-center space-x-4">
+                  <div className="p-4 bg-emerald-500/20 rounded-xl">
+                    <UserCheck className="w-10 h-10 text-neon-emerald" />
+                  </div>
+                  <div>
+                    <div className="text-3xl md:text-4xl font-bold text-neon-emerald">
+                      {data?.guild?.verifiedUserCountFormatted ||
+                        defaultGuildData.verifiedUserCountFormatted}
+                    </div>
+                    <div className="text-dark-300 text-lg">Verified Members</div>
+                  </div>
                 </div>
-                <p className="text-dark-300 mb-4">
-                  Visit the{' '}
-                  <a href="/guide" className="text-neon-emerald font-semibold hover:text-neon-emerald/80 hover:underline transition cursor-help" data-testid="link-guide-inline">
-                    Verification Guide
-                  </a>
-                  {' '}if you need help.
-                  <br />
-                  Contact our Moderators on Dreamer's Land Discord Server for assistance.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <a href="/guide">
-                    <Button variant="outline" className="border-dark-600 text-dark-300 hover:text-white cursor-help" data-testid="button-how-to-verify">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      How to Verify
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto"
+              data-aos="fade-up"
+              data-aos-delay="100"
+            >
+              {!isLoggedIn ? (
+                <>
+                  {/* Login Button - Large and prominent */}
+                  <a
+                    href="https://discord-auth.pages.dev?to=/portal"
+                    className="w-full sm:w-auto"
+                  >
+                    <Button
+                      size="lg"
+                      className="w-full sm:min-w-[240px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-purple hover:from-neon-purple/80 hover:via-neon-pink/80 hover:to-neon-purple/80 text-white font-bold py-6 px-10 text-lg rounded-2xl shadow-2xl shadow-neon-purple/40 hover:shadow-neon-purple/60 transform hover:scale-105 transition-all duration-300 border-0"
+                    >
+                      <LogIn className="w-6 h-6 mr-3" />
+                      Login with Discord
                     </Button>
                   </a>
-                  <a href="/">
-                    <Button variant="ghost" className="text-dark-300 hover:text-white" data-testid="button-visit-main">
-                      <Home className="w-4 h-4 mr-2" />
-                      Visit Homepage
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* YouTube Channel Section */}
-            <Card className="bg-dark-800/40 border-dark-600 backdrop-blur-md" data-testid="card-youtube-channel">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <Youtube className="w-6 h-6 text-red-500 mr-2" />
-                  <h3 className="text-xl font-semibold text-white">YouTube Channel</h3>
-                </div>
-                
-                <div className="flex flex-wrap items-center gap-4">
-                  {data?.youtube ? (
-                    <>
-                      <Avatar className="w-16 h-16" data-testid="img-youtube-avatar">
-                        <AvatarImage src={data.youtube.logoUrl} alt="YouTube Channel" />
-                        <AvatarFallback>
-                          <Youtube className="w-8 h-8 text-red-500" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-[120px] text-left">
-                        <h4 className="text-lg font-semibold text-white" data-testid="text-youtube-name">
-                          {data.youtube.channelTitle}
-                        </h4>
-                        <p className="text-dark-300" data-testid="text-youtube-subscribers">
-                          {data.youtube.subscriberCountFormatted ? `${data.youtube.subscriberCountFormatted} subs` : 'NA'}
-                        </p>
-                      </div>
-                      <Button 
-                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 shrink-0"
-                        onClick={() => window.open(data.youtube!.channelUrl, '_blank', 'noopener,noreferrer')}
-                        data-testid="button-subscribe-youtube"
+                  {/* Join Discord Button */}
+                  <Button
+                    size="lg"
+                    className="w-full sm:min-w-[240px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-6 px-10 text-lg rounded-2xl shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300 border-0"
+                    onClick={() =>
+                      window.open("https://joindc.pages.dev", "_blank", "noopener,noreferrer")
+                    }
+                  >
+                    <MessagesSquare className="w-6 h-6 mr-3" />
+                    Join Discord
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* Show Verify Now button if logged in but not verified */}
+                  {!isVerified && (
+                    <a href="/verify/now" className="w-full sm:w-auto">
+                      <Button
+                        size="lg"
+                        className="w-full sm:min-w-[240px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-purple hover:from-neon-purple/80 hover:via-neon-pink/80 hover:to-neon-purple/80 text-white font-bold py-6 px-10 text-lg rounded-2xl shadow-2xl shadow-neon-purple/40 hover:shadow-neon-purple/60 transform hover:scale-105 transition-all duration-300 border-0"
                       >
-                        <Youtube className="w-4 h-4 mr-2" />
-                        Subscribe
+                        <CheckCircle2 className="w-6 h-6 mr-3" />
+                        Verify Now
                       </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Avatar className="w-16 h-16 transition-all duration-500 ease-in-out" data-testid="img-youtube-avatar">
-                        <AvatarImage src={defaultYoutubeData.logoUrl} alt="YouTube Channel" />
-                        <AvatarFallback>
-                          <Youtube className="w-8 h-8 text-red-500" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-[120px] text-left">
-                        <h4 className="text-lg font-semibold text-white transition-all duration-500 ease-in-out" data-testid="text-youtube-name">
-                          {defaultYoutubeData.channelTitle}
-                        </h4>
-                        <p className="text-dark-300 transition-all duration-500 ease-in-out" data-testid="text-youtube-subscribers">
-                          {defaultYoutubeData.subscriberCountFormatted} subs
-                        </p>
-                      </div>
-                      <Button 
-                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 shrink-0"
-                        onClick={() => window.open(defaultYoutubeData.channelUrl, '_blank', 'noopener,noreferrer')}
-                        data-testid="button-subscribe-youtube"
-                      >
-                        <Youtube className="w-4 h-4 mr-2" />
-                        Subscribe
-                      </Button>
-                    </>
+                    </a>
                   )}
-                  {!data?.youtube && (
-                    <div className="text-center text-dark-400 w-full hidden">
-                      YouTube channel information unavailable
+                  {/* Show verified badge if already verified */}
+                  {isVerified && (
+                    <div className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-500/40 rounded-2xl shadow-xl shadow-green-500/20">
+                      <CheckCircle2 className="w-8 h-8 text-green-400" />
+                      <span className="text-xl font-bold text-green-400">You're Verified!</span>
                     </div>
                   )}
+                </>
+              )}
+
+              {/* Homepage Button */}
+              <a href="/" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:min-w-[200px] border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-cyan hover:bg-neon-cyan/10 font-semibold py-6 px-8 text-lg rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-neon-cyan/20"
+                >
+                  <Home className="w-5 h-5 mr-3" />
+                  Homepage
+                </Button>
+              </a>
+            </div>
+
+            {/* How to Verify Section */}
+            <div
+              className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/20 via-dark-800/40 to-dark-900/60 border border-purple-900/30 backdrop-blur-md p-8 max-w-3xl mx-auto"
+              data-aos="fade-up"
+              data-aos-delay="150"
+            >
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-neon-purple/10 rounded-full blur-3xl"></div>
+              <div className="relative">
+                <div className="flex items-center justify-center mb-6">
+                  <Sparkles className="w-8 h-8 text-neon-purple mr-3" />
+                  <h3 className="text-2xl md:text-3xl font-bold text-white">How to Verify?</h3>
                 </div>
-                
-                <p className="text-dark-400 text-sm mt-4 text-center" data-testid="text-subscribe-message">
-                  <Crown className="w-4 h-4 inline-block mr-1 text-neon-purple" />
-                  Subscribe to unlock exclusive Discord rewards!
+                <p className="text-dark-300 text-lg text-center mb-6 leading-relaxed">
+                  Need help with verification? Check out our detailed guide or contact our
+                  moderators on Discord for assistance.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a href="/guide">
+                    <Button
+                      variant="outline"
+                      className="border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
+                    >
+                      <BookOpen className="w-5 h-5 mr-2" />
+                      Verification Guide
+                    </Button>
+                  </a>
+                  <a href="/portal/privacy-policy">
+                    <Button
+                      variant="ghost"
+                      className="text-dark-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+                    >
+                      <Shield className="w-5 h-5 mr-2" />
+                      Privacy Policy
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* YouTube Section */}
+            <YoutubeSection />
           </div>
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-white/10 bg-dark-950/80 backdrop-blur-md" data-testid="portal-footer">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between">
-              <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-                {data?.guild?.iconUrl && (
-                  <Avatar className="w-6 h-6" data-testid="img-footer-logo">
-                    <AvatarImage src={data.guild.iconUrl} alt="Server Icon" />
-                    <AvatarFallback>{data.guild.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                )}
-                <span className="text-dark-400 text-sm" data-testid="text-copyright">
-                  © 2025 {data?.guild?.name || "Dreamer's Land"}
-                </span>
-              </div>
-              <div className="flex space-x-6 text-sm">
-                <a href="/" className="text-dark-400 hover:text-white transition-colors" data-testid="link-footer-home">
-                  Homepage
-                </a>
-                <a href="/guide" className="text-dark-400 hover:text-white transition-colors cursor-help" data-testid="link-footer-guide">
-                  Guide
-                </a>
-                <a href="/portal/privacy-policy" className="text-dark-400 hover:text-white transition-colors cursor-help" data-testid="link-footer-privacy">
-                  Privacy
-                </a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <VerificationFooter />
       </main>
     </>
   );
