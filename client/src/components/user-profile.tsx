@@ -12,7 +12,6 @@ interface UserProfilePopupProps {
 function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [showDecoration, setShowDecoration] = useState(true);
   const popupRef = useRef<HTMLDivElement>(null);
   const confirmDialogRef = useRef<HTMLDivElement>(null);
 
@@ -72,13 +71,12 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
                 {loginData.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            {decorationUrl && showDecoration && (
+            {decorationUrl && (
               <img
                 src={decorationUrl}
-                alt=""
+                alt="Avatar Decoration"
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 style={{ transform: "scale(1.2)" }}
-                onError={() => setShowDecoration(false)}
               />
             )}
           </div>
@@ -119,13 +117,12 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
                     {loginData.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                {decorationUrl && showDecoration && (
+                {decorationUrl && (
                   <img
                     src={decorationUrl}
-                    alt=""
+                    alt="Avatar Decoration"
                     className="absolute inset-0 w-full h-full pointer-events-none"
                     style={{ transform: "scale(1.3)" }}
-                    onError={() => setShowDecoration(false)}
                   />
                 )}
               </div>
