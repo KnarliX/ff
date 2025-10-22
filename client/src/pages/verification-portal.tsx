@@ -15,9 +15,9 @@ import {
   BookOpen,
   Shield,
   Sparkles,
-  CheckCircle2,
-  LogIn,
+  CheckCircle2
 } from "lucide-react";
+import { discord } from "@/components/icons";
 import AOS from "aos";
 
 export function VerificationPortal() {
@@ -284,7 +284,7 @@ export function VerificationPortal() {
                       size="lg"
                       className="w-full sm:min-w-[240px] bg-gradient-to-r from-neon-purple via-neon-pink to-neon-purple hover:from-neon-purple/80 hover:via-neon-pink/80 hover:to-neon-purple/80 text-white font-bold py-6 px-10 text-lg rounded-2xl shadow-2xl shadow-neon-purple/40 hover:shadow-neon-purple/60 transform hover:scale-105 transition-all duration-300 border-0"
                     >
-                      <LogIn className="w-6 h-6 mr-3" />
+                      <discord className="w-6 h-6 mr-3" />
                       Login with Discord
                     </Button>
                   </a>
@@ -314,13 +314,8 @@ export function VerificationPortal() {
                       </Button>
                     </a>
                   )}
-                  {/* Show verified badge if already verified */}
-                  {isVerified && (
-                    <div className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-500/40 rounded-2xl shadow-xl shadow-green-500/20">
-                      <CheckCircle2 className="w-8 h-8 text-green-400" />
-                      <span className="text-xl font-bold text-green-400">You're Verified!</span>
-                    </div>
-                  )}
+                  {/* hide if verified */}
+                  {isVerified}
                 </>
               )}
 
@@ -365,8 +360,8 @@ export function VerificationPortal() {
                   </a>
                   <a href="/portal/privacy-policy">
                     <Button
-                      variant="ghost"
-                      className="text-dark-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+                      variant="outline"
+                      className="border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
                     >
                       <Shield className="w-5 h-5 mr-2" />
                       Privacy Policy
