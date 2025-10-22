@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { getLoginData, logout, LoginData } from "@/lib/login";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, LogOut, BadgeCheck, BadgeAlert } from "lucide-react";
+import { CheckCircle2, LogOut, BadgeCheck, BadgeAlert, X } from "lucide-react";
 
 interface UserProfilePopupProps {
   loginData: LoginData;
