@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useInfoData } from "@/lib/info-data";
 import { defaultGuildData } from "@/lib/default-data";
 import { getLoginData, LoginData } from "@/lib/login";
@@ -23,20 +23,91 @@ import AOS from "aos";
 export function VerificationPortal() {
   const { data, isLoading, error, isConnected, refetch } = useInfoData();
   const [loginData, setLoginData] = useState<LoginData | null>(null);
+  
+  // Use ref to track previous serialized value to avoid stale closure issues
+  const previousSerializedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Initialize AOS
+    // Initialize AOS (only once)
     AOS.init({
       duration: 800,
       easing: "ease-out-cubic",
       once: true,
       offset: 50,
     });
-
-    // Check login status
-    const userData = getLoginData();
-    setLoginData(userData);
   }, []);
+
+  useEffect(() => {
+    // Check login status with ref-based comparison to avoid stale closures
+    const checkLoginStatus = () => {
+      const userData = getLoginData();
+      const newSerialized = userData ? JSON.stringify(userData) : null;
+      
+      // Compare against ref, not state, to avoid stale closure issues
+      if (previousSerializedRef.current !== newSerialized) {
+        previousSerializedRef.current = newSerialized;
+        setLoginData(userData);
+      }
+      
+      return userData;
+    };
+
+    checkLoginStatus();
+
+    // Poll localStorage periodically when not logged in to detect auth callback
+    let pollInterval: number | null = null;
+    
+    const startPolling = () => {
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(() => {
+        checkLoginStatus();
+      }, 1000); // Check every second
+    };
+
+    const stopPolling = () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+      }
+    };
+
+    // Start polling only if not logged in
+    if (!loginData) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+
+    // Listen for storage changes (in case user logs in/out in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'login_data') {
+        checkLoginStatus();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Check login status when page regains focus
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkLoginStatus();
+      }
+    };
+
+    const handleFocus = () => {
+      checkLoginStatus();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      stopPolling();
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [loginData]);
 
   // Error state for failed data loading
   if (error && !data) {
