@@ -184,7 +184,7 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
       {/* Custom Logout Confirmation Dialog */}
       {showLogoutConfirm && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-dark-800 border-2 border-dark-600 rounded-2xl shadow-2xl shadow-black/50 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
+          <div className="bg-dark-800 border-2 border-dark-600 rounded-2xl shadow-2xl shadow-black/50 max-w-md w-full p-6 animate-in zoom-in-95 duration-200 mx-auto my-auto">
             {/* Icon */}
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/40 flex items-center justify-center">
