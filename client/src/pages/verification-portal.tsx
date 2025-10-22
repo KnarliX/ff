@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
 import { useInfoData } from "@/lib/info-data";
 import { defaultGuildData } from "@/lib/default-data";
 import { getLoginData, LoginData } from "@/lib/login";
@@ -7,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserProfileButton } from "@/components/user-profile";
 import { YoutubeSection } from "@/components/youtube-section";
 import { VerificationFooter } from "@/components/verification-footer";
+import "@/styles/fonts.css";
+import "@/styles/index.css";
 import {
   Users,
   UserCheck,
@@ -15,7 +18,7 @@ import {
   BookOpen,
   Shield,
   Sparkles,
-  UserCheck
+  CheckCircle2
 } from "lucide-react";
 import { discord } from "@/components/icons";
 import { initializeAnimations, checkReducedMotion } from "@/lib/meta-utils";
@@ -305,3 +308,5 @@ export function VerificationPortal() {
     </>
   );
 }
+
+createRoot(document.getElementById("root")!).render(<VerificationPortal />);

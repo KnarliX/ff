@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
 import { HeroSection } from "@/components/hero-section";
 import { AboutSection } from "@/components/about-section";
 import { SocialSection } from "@/components/social-section";
@@ -6,6 +7,8 @@ import { YoutubeSection } from "@/components/youtube-section";
 import { Footer } from "@/components/footer";
 import { useInfoData } from "@/lib/info-data";
 import { initializeAnimations, checkReducedMotion } from "@/lib/meta-utils";
+import "@/styles/fonts.css";
+import "@/styles/index.css";
 import 'aos/dist/aos.css';
 
 export function Homepage() {
@@ -52,10 +55,7 @@ export function Homepage() {
           data={data}
           isLoading={isLoading}
         />
-        <YoutubeSection 
-          data={data}
-          isLoading={isLoading}
-          />
+        <YoutubeSection />
         
         <Footer 
           isConnected={isConnected}
@@ -64,3 +64,5 @@ export function Homepage() {
     </>
   );
 }
+
+createRoot(document.getElementById("root")!).render(<Homepage />);
