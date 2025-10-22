@@ -236,7 +236,7 @@ export function UserProfileButton() {
   const handleLogout = () => {
     logout();
     setLoginData(null);
-    window.location.reload(); // Reload to update UI
+    window.location.reload();
   };
 
   if (!loginData) {
