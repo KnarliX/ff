@@ -1,4 +1,3 @@
-
 // login.ts
 export type AvatarDecorationData = {
   asset: string;
