@@ -271,20 +271,20 @@ export function VerificationPortal() {
                   Need help with verification? Check out our detailed guide or contact our
                   moderators on Discord for assistance.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a href="/guide">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <a href="/guide" className="w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      className="border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
+                      className="w-full sm:w-auto border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
                     >
                       <BookOpen className="w-5 h-5 mr-2" />
                       Verification Guide
                     </Button>
                   </a>
-                  <a href="/portal/privacy-policy">
+                  <a href="/portal/privacy-policy" className="w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      className="border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
+                      className="w-full sm:w-auto border-2 border-dark-600 text-dark-300 hover:text-white hover:border-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
                     >
                       <Shield className="w-5 h-5 mr-2" />
                       Privacy Policy
