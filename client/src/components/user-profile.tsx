@@ -26,8 +26,6 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
   const confirmLogout = () => {
     logout();
     onLogout();
-    setShowLogoutConfirm(false);
-    setIsOpen(false);
     window.location.reload();
   };
 
