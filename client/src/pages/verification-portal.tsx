@@ -17,7 +17,7 @@ import {
   Sparkles,
   CheckCircle2
 } from "lucide-react";
-import { discord as Discord } from "@/components/icons";
+import { Discord } from "@/components/icons";
 import { initializeAnimations, checkReducedMotion } from "@/lib/meta-utils";
 import "aos/dist/aos.css";
 
