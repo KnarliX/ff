@@ -86,14 +86,17 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
 
       {/* Backdrop overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/40 z-40 transition-opacity duration-300" />
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300"
+          onClick={() => setIsOpen(false)}
+        />
       )}
 
-      {/* Profile Popup */}
+      {/* Profile Popup - Centered */}
       {isOpen && (
         <div
           ref={popupRef}
-          className="fixed top-20 right-4 w-96 max-w-[calc(100vw-2rem)] bg-dark-800 border-2 border-dark-600 rounded-2xl shadow-2xl shadow-black/50 z-50 animate-in slide-in-from-right duration-300"
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[calc(100vw-2rem)] bg-dark-800 border-2 border-dark-600 rounded-2xl shadow-2xl shadow-black/50 z-50 animate-in zoom-in-95 fade-in duration-300"
         >
           {/* Close Button */}
           <button
@@ -182,7 +185,14 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
 
       {/* Custom Logout Confirmation Dialog */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              cancelLogout();
+            }
+          }}
+        >
           <div className="bg-dark-800 border-2 border-dark-600 rounded-2xl shadow-2xl shadow-black/50 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
             {/* Icon */}
             <div className="flex justify-center mb-4">
