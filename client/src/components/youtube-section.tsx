@@ -22,6 +22,7 @@ export function YoutubeSection() {
 
   return (
     <div
+      id="youtube-section"
       className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-950/20 via-dark-800/40 to-dark-900/60 border border-red-900/20 backdrop-blur-md p-8"
       data-aos="fade-up"
       data-aos-delay="200"

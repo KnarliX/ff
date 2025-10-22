@@ -8,6 +8,17 @@ interface SocialSectionProps {
 }
 
 export function SocialSection({ data }: SocialSectionProps) {
+  const handlePlatformClick = (platform: { scroll?: string; url: string }) => {
+    if (platform.scroll) {
+      const element = document.getElementById(platform.scroll);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+    window.open(platform.url, '_blank', 'noopener,noreferrer');
+  };
+
   const socialPlatforms = [
     {
       name: 'YouTube',
@@ -18,6 +29,7 @@ export function SocialSection({ data }: SocialSectionProps) {
       url: 'https://www.youtube.com/channel/UCa4-5c2gCYxqummRhmh6V4Q',
       buttonText: 'Subscribe',
       testId: 'youtube',
+      scroll: 'youtube-section',
     },
     {
       name: 'Instagram',
@@ -83,15 +95,16 @@ export function SocialSection({ data }: SocialSectionProps) {
                   <p className="text-dark-300 text-xs md:text-sm mb-3 md:mb-4 group-hover:text-dark-200 transition-colors duration-300" data-testid={`text-${platform.testId}-handle`}>
                     {platform.handle}
                   </p>
-                  <a 
-                    href={platform.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`block bg-gradient-to-r ${platform.gradient} text-white py-2 px-3 md:px-4 rounded-full text-xs md:text-sm font-medium transition-all duration-300 hover:scale-110 hover:shadow-2xl relative overflow-hidden group/button before:absolute before:inset-0 before:bg-white/20 before:translate-y-full hover:before:translate-y-0 before:transition-transform before:duration-300`}
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePlatformClick(platform);
+                    }}
+                    className={`w-full bg-gradient-to-r ${platform.gradient} text-white py-2 px-3 md:px-4 rounded-full text-xs md:text-sm font-medium transition-all duration-300 hover:scale-110 hover:shadow-2xl relative overflow-hidden group/button before:absolute before:inset-0 before:bg-white/20 before:translate-y-full hover:before:translate-y-0 before:transition-transform before:duration-300`}
                     data-testid={`link-${platform.testId}`}
                   >
                     <span className="relative z-10">{platform.buttonText}</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
