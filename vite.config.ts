@@ -35,6 +35,7 @@ export default defineConfig({
       input: {
         main: path.resolve(import.meta.dirname, "client", "pages", "index.html"),
         portal: path.resolve(import.meta.dirname, "client", "pages", "portal", "index.html"),
+        verify: path.resolve(import.meta.dirname, "client", "pages", "verify", "index.html"),
         404: path.resolve(import.meta.dirname, "client", "pages", "404.html"),
         authcallback: path.resolve(import.meta.dirname, "client", "pages", "oauth2", "callback", "index.html"),
         error: path.resolve(import.meta.dirname, "client", "pages", "error", "index.html"),
