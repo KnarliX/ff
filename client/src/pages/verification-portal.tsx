@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useInfoData } from "@/lib/info-data";
 import { defaultGuildData } from "@/lib/default-data";
-import { getLoginData, LoginData, watchLoginData } from "@/lib/login";
+import { getLoginData, LoginData } from "@/lib/login";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserProfileButton } from "@/components/user-profile-popup";
@@ -32,15 +32,6 @@ export function VerificationPortal() {
       once: true,
       offset: 50,
     });
-  }, []);
-
-  useEffect(() => {
-    // Watch for login data changes
-    const cleanup = watchLoginData((data) => {
-      setLoginData(data);
-    });
-
-    return cleanup;
   }, []);
 
   // Error state for failed data loading
