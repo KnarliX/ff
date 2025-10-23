@@ -84,73 +84,68 @@ function VerifyPage() {
         </header>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="max-w-2xl w-full">
-            {/* Verification Card */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/30 via-dark-800/50 to-dark-900/60 border border-purple-900/30 backdrop-blur-md p-8 md:p-12">
-              {/* Background glow effects */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-neon-purple/10 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="flex-1 flex items-center justify-center px-4 py-12 relative">
+          {/* Background glow effects */}
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-              <div className="relative z-10 space-y-8">
-                {/* Title */}
-                <div className="text-center">
-                  <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                    YouTube Verification
-                  </h1>
-                  <p className="text-dark-300 text-lg">
-                    Connect your YouTube account to complete verification
-                  </p>
-                </div>
+          <div className="max-w-2xl w-full relative z-10">
+            {/* Title */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                YouTube Verification
+              </h1>
+              <p className="text-dark-300 text-xl">
+                Connect your YouTube account to complete verification
+              </p>
+            </div>
 
-                {/* User Profile Section */}
-                <div className="flex flex-col items-center space-y-6 py-6">
-                  {/* Avatar */}
-                  <div className="relative">
-                    <Avatar className="w-28 h-28 md:w-32 md:h-32 ring-4 ring-neon-purple/30 shadow-2xl shadow-neon-purple/20">
-                      <AvatarImage src={avatarUrl} alt={verifyData.displayName} />
-                      <AvatarFallback className="bg-neon-purple text-white text-3xl font-bold">
-                        {verifyData.displayName.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
+            {/* User Profile Section */}
+            <div className="flex flex-col items-center space-y-8 py-8">
+              {/* Avatar */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-neon-purple/20 rounded-full blur-2xl"></div>
+                <Avatar className="relative w-32 h-32 md:w-40 md:h-40 ring-4 ring-neon-purple/40 shadow-2xl shadow-neon-purple/30">
+                  <AvatarImage src={avatarUrl} alt={verifyData.displayName} />
+                  <AvatarFallback className="bg-neon-purple text-white text-4xl font-bold">
+                    {verifyData.displayName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
 
-                  {/* User Info */}
-                  <div className="text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                      {verifyData.displayName}
-                    </h2>
-                    <p className="text-dark-300 text-lg mb-1">@{verifyData.discordTag}</p>
-                    <p className="text-dark-400 text-sm font-mono">ID: {verifyData.discordId}</p>
-                  </div>
+              {/* User Info */}
+              <div className="text-center space-y-2">
+                <h2 className="text-3xl md:text-4xl font-bold text-white">
+                  {verifyData.displayName}
+                </h2>
+                <p className="text-dark-300 text-xl">@{verifyData.discordTag}</p>
+                <p className="text-dark-400 text-sm font-mono">ID: {verifyData.discordId}</p>
+              </div>
 
-                  {/* Divider */}
-                  <div className="w-full border-t border-dark-600"></div>
+              {/* Instructions */}
+              <div className="text-center space-y-3 pt-4">
+                <p className="text-dark-300 text-lg">
+                  Click the button below to connect your YouTube account
+                </p>
+                <p className="text-sm text-dark-400">
+                  You'll be redirected to Google to authorize access
+                </p>
+              </div>
 
-                  {/* Instructions */}
-                  <div className="text-center space-y-3">
-                    <p className="text-dark-300">
-                      Click the button below to connect your YouTube account
-                    </p>
-                    <p className="text-sm text-dark-400">
-                      You'll be redirected to Google to authorize access
-                    </p>
-                  </div>
+              {/* Connect Button */}
+              <Button
+                size="lg"
+                onClick={handleConnectYouTube}
+                className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold px-16 py-7 text-xl rounded-2xl shadow-2xl shadow-red-500/50 hover:shadow-red-500/70 transform hover:scale-105 transition-all duration-300 border-0 mt-4"
+              >
+                <Youtube className="w-7 h-7 mr-3" />
+                Connect with YouTube
+              </Button>
 
-                  {/* Connect Button */}
-                  <Button
-                    size="lg"
-                    onClick={handleConnectYouTube}
-                    className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold px-12 py-6 text-lg rounded-2xl shadow-2xl shadow-red-500/40 hover:shadow-red-500/60 transform hover:scale-105 transition-all duration-300 border-0"
-                  >
-                    <Youtube className="w-6 h-6 mr-3" />
-                    Connect with YouTube
-                  </Button>
-                </div>
-
-                {/* Info Box */}
-                <div className="bg-dark-900/50 border border-dark-700 rounded-xl p-4">
-                  <p className="text-sm text-dark-300 text-center">
+              {/* Info Note */}
+              <div className="mt-8 max-w-md">
+                <div className="bg-dark-900/30 backdrop-blur-sm border border-purple-900/20 rounded-2xl p-5">
+                  <p className="text-sm text-dark-300 text-center leading-relaxed">
                     <span className="text-neon-purple font-semibold">Note:</span> After
                     connecting, we'll verify your YouTube subscription status and grant you
                     exclusive Discord roles automatically.
