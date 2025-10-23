@@ -45,3 +45,15 @@ export function logout() {
 export function isLoggedIn(): boolean {
   return !!getLoginData();
 }
+
+// Update verification status
+export function updateVerificationStatus(verified: boolean): boolean {
+  const loginData = getLoginData();
+  if (!loginData) {
+    return false;
+  }
+  
+  loginData.verified = verified;
+  setLoginData(loginData);
+  return true;
+}
