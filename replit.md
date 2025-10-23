@@ -43,8 +43,16 @@ Never use `npm install` or `npm` commands for this project.
 ## Component Structure
 - **Layout**: Modular section-based components (Hero, About, Social, Footer)
 - **UI Components**: Reusable Shadcn/ui components with consistent styling
+- **Reusable Verification Component**: `VerifyComponent` for YouTube verification flow that accepts user data and callback
 - **Responsive Design**: Mobile-first approach with optimized touch interactions
 - **Instant Loading**: Default data displays immediately with smooth transitions when API data loads
+
+## Verification System
+- **Token Generation**: Backend API integration at `https://janvi.jarvibeta.xyz/api/generate-token`
+- **Cookie Management**: 10-minute token caching in browser cookies to prevent duplicate API calls
+- **Authentication Check**: Login status verification using localStorage-based auth system
+- **Verification Flow**: `/verify/new` page handles login check, token generation, and verification state
+- **Smart Redirects**: Automatic redirects for non-logged users and already-verified users
 
 ## Performance Optimizations
 - **Route-Based Code Splitting**: React.lazy() with Suspense for independent page loading
