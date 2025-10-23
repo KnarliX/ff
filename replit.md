@@ -51,7 +51,7 @@ Never use `npm install` or `npm` commands for this project.
 - **Token Generation**: Backend API integration at `https://janvi.jarvibeta.xyz/api/generate-token`
 - **Cookie Management**: 10-minute token caching in browser cookies to prevent duplicate API calls
 - **Authentication Check**: Login status verification using localStorage-based auth system
-- **Verification Flow**: `/verify/new` page handles login check, token generation, and verification state
+- **Verification Flow**: `/verify/now` page handles login check, token generation, and verification state
 - **Smart Redirects**: Automatic redirects for non-logged users and already-verified users
 
 ## Performance Optimizations

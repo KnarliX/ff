@@ -10,7 +10,7 @@ import "@/styles/index.css";
 
 type PageState = 'loading' | 'not_logged_in' | 'already_verified' | 'generating_token' | 'show_verify';
 
-function VerifyNewPage() {
+function VerifyNowPage() {
   const [pageState, setPageState] = useState<PageState>('loading');
   const [token, setToken] = useState<string | null>(null);
 
@@ -189,4 +189,4 @@ function VerifyNewPage() {
   return null;
 }
 
-createRoot(document.getElementById("root")!).render(<VerifyNewPage />);
+createRoot(document.getElementById("root")!).render(<VerifyNowPage />);
