@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Error | Dreamer's Land</title>
+  <title>Authentication Error</title>
   <link rel='icon' type='image/svg+xml' href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90" fill="red">RJ</text></svg>'>
   <style>
     *, *::before, *::after {
@@ -351,11 +351,11 @@
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#ef4444" opacity=".2"/><path d="M24 8C15.163 8 8 15.163 8 24s7.163 16 16 16 16-7.163 16-16S32.837 8 24 8m2 22a2 2 0 1 1-4 0v-6a2 2 0 1 1 4 0zm-2-10a2 2 0 1 1-.001-3.999A2 2 0 0 1 24 20" fill="#ef4444"/></svg>
     </div>
     
-    <h1 id="errorTitle">Oops! Something Went Wrong</h1>
-    <div class="error-subtitle" id="errorSubtitle">An error occurred while processing your request.</div>
+    <h1>Authentication ERROR</h1>
+    <div class="error-subtitle">An error occurred during authentication.</div>
     
     <div class="error-message" id="errorMessage">
-      We encountered an issue while processing your request. Please try again or contact support if the problem persists.
+      An error occurred during authentication. Please try again.
     </div>
     
     <div class="error-code-wrapper">
@@ -372,11 +372,10 @@
     </div>
     
     <div class="info-box">
-      <strong>💡 Common Issues:</strong><br>
-      • Authentication errors: Token expired or invalid credentials<br>
-      • YouTube connection errors: Permission denied or account not linked<br>
-      • Network errors: Check your internet connection and try again<br>
-      • Server errors: Our team has been notified and is working on it
+      <strong>please don't do this if you're doing:</strong><br>
+      • don't edit auth scope or any parameters<br>
+      • don't worry about privacy your data is fully safe and secure with us<br>
+      • don't visit callback page directly
     </div>
     
     <div class="help-text">
@@ -411,25 +410,6 @@
     function displayError() {
       const urlParams = new URLSearchParams(window.location.search);
       const errorMsg = urlParams.get('msg') || urlParams.get('message');
-      const errorType = urlParams.get('type') || 'general';
-      
-      // Set title and subtitle based on error type
-      const titleElement = document.getElementById('errorTitle');
-      const subtitleElement = document.getElementById('errorSubtitle');
-      
-      if (errorType === 'auth' || errorMsg?.toLowerCase().includes('auth')) {
-        titleElement.textContent = 'Authentication Error';
-        subtitleElement.textContent = 'We couldn\'t verify your credentials.';
-        document.title = 'Authentication Error | Dreamer\'s Land';
-      } else if (errorType === 'youtube' || errorMsg?.toLowerCase().includes('youtube')) {
-        titleElement.textContent = 'YouTube Connection Error';
-        subtitleElement.textContent = 'Unable to connect your YouTube account.';
-        document.title = 'YouTube Error | Dreamer\'s Land';
-      } else if (errorType === 'token' || errorMsg?.toLowerCase().includes('token')) {
-        titleElement.textContent = 'Invalid Token';
-        subtitleElement.textContent = 'The verification token is invalid or expired.';
-        document.title = 'Token Error | Dreamer\'s Land';
-      }
       
       if (errorMsg) {
         const decodedMessage = decodeURIComponent(errorMsg);
@@ -439,12 +419,13 @@
         const errorCode = Date.now().toString(36).toUpperCase();
         document.getElementById('errorCode').textContent = errorCode;
         
-        console.error('Error:', decodedMessage);
+        console.error('Authentication error:', decodedMessage);
       } else {
-        document.getElementById('errorMessage').innerHTML = 'An <strong>unknown error</strong> occurred. Please try again or contact support.';
-        const errorCodeWrapper = document.querySelector('.error-code-wrapper');
-        if (errorCodeWrapper) errorCodeWrapper.style.display = 'none';
+        document.getElementById('errorMessage').innerHTML = 'An <strong>unknown error</strong> occurred. Please try <em>authenticating again</em>.';
+        document.getElementById('errorCode').style.display = 'none';
       }
+      
+      document.title = 'Authentication Error';
     }
 
     document.getElementById('errorCode').addEventListener('click', copyErrorCode);
