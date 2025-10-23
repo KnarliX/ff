@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Youtube, ArrowLeft, CheckCircle2, Shield } from "lucide-react";
 
 export interface VerifyComponentProps {
-  token: string;
   displayName: string;
   username: string;
   discordId: string;
