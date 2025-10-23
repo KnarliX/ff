@@ -105,7 +105,7 @@ function VerifyPage() {
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                   {verifyData.displayName}
                 </h1>
-                <p className="text-base sm:text-lg text-dark-300">@{verifyData.discordTag}</p>
+                <p className="text-base sm:text-lg text-dark-300">@{verifyData.username}</p>
                 <p className="text-xs sm:text-sm text-dark-400 font-mono">
                   ID: {verifyData.discordId}
                 </p>

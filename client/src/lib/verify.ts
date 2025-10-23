@@ -1,7 +1,7 @@
 export interface VerifyData {
   token: string;
   discordId: string;
-  discordTag: string;
+  username: string;
   displayName: string;
   avatar: string;
 }
