@@ -203,7 +203,7 @@ export function VerificationPortal() {
                 <>
                   {/* Login Button - Large and prominent */}
                   <a
-                    href="https://discord-auth.pages.dev?to=/portal"
+                    href="https://auth.dreamer.jarvibeta.xyz?to=/portal"
                     className="w-full sm:w-auto"
                   >
                     <Button
