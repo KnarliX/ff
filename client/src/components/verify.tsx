@@ -152,7 +152,7 @@ export function VerifyComponent({
                 <p className="text-xs text-center text-dark-400">
                   By clicking this button, you agree to our{" "}
                   <a 
-                    href="/privacy-policy" 
+                    href="/portal/privacy-policy" 
                     className="text-neon-purple hover:text-purple-400 underline transition-colors duration-200"
                   >
                     Privacy Policy
