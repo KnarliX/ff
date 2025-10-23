@@ -58,6 +58,7 @@ function VerifyPage() {
 
   return (
     <VerifyComponent
+      token={verifyData.token}
       displayName={verifyData.displayName}
       username={verifyData.username}
       discordId={verifyData.discordId}
