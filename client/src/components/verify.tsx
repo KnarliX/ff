@@ -1,6 +1,10 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Youtube, ArrowLeft, CheckCircle2, Shield } from "lucide-react";
+import { useInfoData } from "@/lib/info-data";
+import { defaultGuildData } from "@/lib/default-data";
+import { UserProfileButton } from "@/components/user-profile";
 
 export interface VerifyComponentProps {
   token: string;
@@ -22,6 +26,7 @@ export function VerifyComponent({
   backUrl = "/portal"
 }: VerifyComponentProps) {
   const avatarUrl = `https://cdn.discordapp.com/avatars/${discordId}/${avatar}.webp?size=256`;
+  const { data, isConnected } = useInfoData();
 
   return (
     <div className="min-h-screen bg-dark-950 relative overflow-hidden">
@@ -32,23 +37,49 @@ export function VerifyComponent({
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-white/5 bg-dark-950/50 backdrop-blur-xl">
+      {/* Header - Same as verification portal */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-dark-950/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
-            <a
-              href={backUrl}
-              className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors duration-200 group"
-            >
-              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform duration-200" />
-              <span className="text-xs sm:text-sm font-medium">Back to Portal</span>
+          <div className="flex items-center justify-between h-16">
+            {/* Logo - Clickable to go to /portal */}
+            <a href="/portal" className="flex items-center space-x-3 group cursor-pointer">
+              <Avatar className="w-10 h-10 transition-all duration-300 group-hover:scale-110">
+                <AvatarImage
+                  src={data?.guild?.iconUrl || defaultGuildData.iconUrl}
+                  alt="Server Icon"
+                />
+                <AvatarFallback>
+                  {(data?.guild?.name || defaultGuildData.name).charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <h1 className="text-xl font-bold text-white group-hover:text-neon-purple transition-colors duration-200">
+                {data?.guild?.name || defaultGuildData.name}
+              </h1>
             </a>
+
+            {/* Right Side - Status & Profile */}
+            <div className="flex items-center space-x-4">
+              {/* Connection Status */}
+              <div className="hidden sm:flex items-center space-x-2">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? "bg-neon-emerald" : "bg-neon-orange"
+                  }`}
+                />
+                <span className="text-xs text-dark-300">
+                  {isConnected ? "Connected" : "Disconnected"}
+                </span>
+              </div>
+
+              {/* User Profile Button */}
+              <UserProfileButton />
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex items-center justify-center min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] px-4 py-8 sm:py-12">
+      <main className="relative z-10 flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-8 sm:py-12">
         <div className="w-full max-w-4xl">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - User Profile */}
