@@ -41,7 +41,7 @@ export function YoutubeSection() {
           {/* YouTube Avatar */}
           <div data-aos="zoom-in" data-aos-delay="100">
             <Avatar className="w-24 h-24 md:w-28 md:h-28 ring-4 ring-red-500/30 shadow-2xl shadow-red-500/20">
-              <AvatarImage src={youtubeData.logoUrl} alt={youtubeData.channelTitle} />
+              <AvatarImage src={youtubeData.logoUrl} alt={youtubeData.channelTitle} loading="lazy" />
               <AvatarFallback className="bg-red-600 text-white text-2xl">
                 <Youtube className="w-12 h-12" />
               </AvatarFallback>
