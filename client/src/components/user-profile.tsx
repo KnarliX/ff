@@ -75,6 +75,7 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
               <img
                 src={decorationUrl}
                 alt="Avatar Decoration"
+                loading="lazy"
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 style={{ transform: "scale(1.2)" }}
               />
