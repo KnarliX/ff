@@ -70,19 +70,10 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
       <div className="relative group">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="relative focus:outline-none focus:ring-2 rounded-full transition-all duration-300 hover:scale-110"
-          style={{ 
-            '--tw-ring-color': ringColor,
-          } as React.CSSProperties}
+          className="relative focus:outline-none focus:ring-2 focus:ring-neon-purple rounded-full transition-all duration-300 hover:scale-110"
         >
           <div className="relative w-12 h-12">
-            <Avatar 
-              className="w-12 h-12 ring-2 hover:ring-opacity-100 transition-all duration-300"
-              style={{
-                '--tw-ring-color': ringColorWithOpacity,
-                '--tw-ring-opacity': '1',
-              } as React.CSSProperties}
-            >
+            <Avatar className="w-12 h-12 ring-2 ring-neon-purple/50 hover:ring-neon-purple transition-all duration-300">
               <AvatarImage src={avatarUrl} alt={loginData.username} />
               <AvatarFallback className="bg-neon-purple text-white font-bold">
                 {loginData.name.charAt(0).toUpperCase()}
