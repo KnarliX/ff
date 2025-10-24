@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getLoginData, logout, LoginData } from "@/lib/login";
+import { getLoginData, logout, LoginData, getAccentColorHex, isColorDark } from "@/lib/login";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, LogOut, BadgeCheck, BadgeAlert, X } from "lucide-react";
@@ -19,6 +19,14 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
   const decorationUrl = loginData.avatar_decoration_data
     ? `https://cdn.discordapp.com/avatar-decoration-presets/${loginData.avatar_decoration_data.asset}.png`
     : null;
+
+  // Get accent color from Discord
+  const accentColorHex = getAccentColorHex(loginData.accent_color);
+  const isDark = isColorDark(accentColorHex);
+  
+  // Use accent color if it's not dark, otherwise use default purple
+  const ringColor = accentColorHex && !isDark ? accentColorHex : '#a855f7';
+  const ringColorWithOpacity = accentColorHex && !isDark ? `${accentColorHex}80` : 'rgba(168, 85, 247, 0.5)';
 
   const handleLogout = () => {
     setShowLogoutConfirm(true);
@@ -62,10 +70,19 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
       <div className="relative group">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="relative focus:outline-none focus:ring-2 focus:ring-neon-purple rounded-full transition-all duration-300 hover:scale-110"
+          className="relative focus:outline-none focus:ring-2 rounded-full transition-all duration-300 hover:scale-110"
+          style={{ 
+            '--tw-ring-color': ringColor,
+          } as React.CSSProperties}
         >
           <div className="relative w-12 h-12">
-            <Avatar className="w-12 h-12 ring-2 ring-neon-purple/50 hover:ring-neon-purple transition-all duration-300">
+            <Avatar 
+              className="w-12 h-12 ring-2 hover:ring-opacity-100 transition-all duration-300"
+              style={{
+                '--tw-ring-color': ringColorWithOpacity,
+                '--tw-ring-opacity': '1',
+              } as React.CSSProperties}
+            >
               <AvatarImage src={avatarUrl} alt={loginData.username} />
               <AvatarFallback className="bg-neon-purple text-white font-bold">
                 {loginData.name.charAt(0).toUpperCase()}
@@ -112,7 +129,13 @@ function UserProfilePopup({ loginData, onLogout }: UserProfilePopupProps) {
             {/* Avatar Section */}
             <div className="flex flex-col items-center mb-6">
               <div className="relative w-28 h-28 mb-4">
-                <Avatar className="w-28 h-28 ring-4 ring-neon-purple/30">
+                <Avatar 
+                  className="w-28 h-28 ring-4"
+                  style={{
+                    '--tw-ring-color': ringColorWithOpacity,
+                    '--tw-ring-opacity': '1',
+                  } as React.CSSProperties}
+                >
                   <AvatarImage src={avatarUrl} alt={loginData.username} />
                   <AvatarFallback className="bg-neon-purple text-white text-3xl font-bold">
                     {loginData.name.charAt(0).toUpperCase()}
